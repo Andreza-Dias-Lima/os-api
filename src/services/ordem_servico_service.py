@@ -17,12 +17,17 @@ class OrdemServicoService:
         self,
         repository,
         requester_client,
-        idempotency_repository
+        idempotency_repository,
+        outbox_repository
     ):
+
         self.repository = repository
         self.requester_client = requester_client
         self.idempotency_repository = (
             idempotency_repository
+        )
+        self.outbox_repository = (
+            outbox_repository
         )
 
     def criar(
@@ -60,6 +65,20 @@ class OrdemServicoService:
         ordem = self.repository.criar(
             ordem
         )
+
+        from src.models.outbox_event import ( OutboxEvent )
+
+        # Cria evento de outbox
+        evento = OutboxEvent(
+            event_type="ORDEM_SERVICO_CRIADA",
+            payload={
+                "ordem_id": ordem.id,
+                "solicitante_id": ordem.solicitante_id,
+                "status": ordem.status
+                }
+            )
+
+        self.outbox_repository.criar( evento )
 
         # Monta resposta
         resposta = {

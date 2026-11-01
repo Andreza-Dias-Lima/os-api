@@ -32,6 +32,10 @@ from src.repositories.idempotency_repository import (
     IdempotencyRepository
 )
 
+from src.repositories.outbox_repository import (
+    OutboxRepository
+)
+
 router = APIRouter(
     prefix="/ordens-servico",
     tags=["Ordens de Serviço"]
@@ -48,6 +52,10 @@ def criar_ordem_servico(
         IdempotencyRepository(db)
     )
 
+    outbox_repository = (
+        OutboxRepository(db)
+    )
+
     repository = OrdemServicoRepository(db)
 
     requester_client = FakeRequesterClient()
@@ -55,7 +63,8 @@ def criar_ordem_servico(
     service = OrdemServicoService(
         repository=repository,
         requester_client=requester_client,
-        idempotency_repository=idempotency_repository
+        idempotency_repository=idempotency_repository,
+        outbox_repository=outbox_repository
     )
 
     try:

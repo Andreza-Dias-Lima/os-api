@@ -8,9 +8,11 @@ from sqlalchemy.orm import Session
 from src.database.dependencies import get_db
 from src.models.ordem_servico import OrdemServico
 
+from src.repositories.ordem_servico_repository import OrdemServicoRepository
 from src.schemas.ordem_servico import (
     CriarOrdemServicoRequest
 )
+from src.services.ordem_servico_service import OrdemServicoService
 
 router = APIRouter(
     prefix="/ordens-servico",
@@ -23,17 +25,13 @@ def criar_ordem_servico(
     db: Session = Depends(get_db)
 ):
 
-    ordem = OrdemServico(
-        solicitante_id=request.solicitante_id,
-        descricao=request.descricao,
-        status="CRIADA",
-        criado_em=datetime.utcnow()
+    repository = OrdemServicoRepository(db)
+
+    service = OrdemServicoService(
+        repository
     )
 
-    db.add(ordem)
-
-    db.commit()
-
-    db.refresh(ordem)
-
-    return ordem
+    return service.criar(
+        solicitante_id=request.solicitante_id,
+        descricao=request.descricao
+    )

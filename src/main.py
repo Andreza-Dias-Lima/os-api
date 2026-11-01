@@ -16,9 +16,17 @@ from src.exceptions.not_found import (
     NotFoundException
 )
 
+from src.middlewares.correlation_middleware import (
+    CorrelationMiddleware
+)
+
 app = FastAPI(
     title="API Ordem de Serviço",
     version="1.0.0"
+)
+
+app.add_middleware(
+    CorrelationMiddleware
 )
 
 app.add_exception_handler(

@@ -10,6 +10,10 @@ from src.integrations.event_publisher import (
     EventPublisher
 )
 
+from src.observability.logger import (
+    logger
+)
+
 def processar_outbox():
 
     db = SessionLocal()
@@ -27,13 +31,19 @@ def processar_outbox():
         )
 
         for evento in eventos:
-
-            print(
-                f"Processando {evento.id}"
+            
+            logger.info(
+                f"Publicando evento "
+                f"{evento.id}"
             )
 
             publisher.publish(
                 evento
+            )
+
+            logger.info(
+                f"Evento publicado "
+                f"{evento.id}"
             )
 
             repositorio.marcar_como_publicado(

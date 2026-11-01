@@ -10,6 +10,13 @@ from src.exceptions.not_found import (
     NotFoundException
 )
 
+from src.observability.logger import (
+    logger
+)
+
+from src.observability.correlation import (
+    correlation_id
+)
 
 class OrdemServicoService:
 
@@ -66,12 +73,17 @@ class OrdemServicoService:
             ordem
         )
 
+        logger.info(
+            f"Ordem criada: {ordem.id}"
+        )
+
         from src.models.outbox_event import ( OutboxEvent )
 
         # Cria evento de outbox
         evento = OutboxEvent(
             event_type="ORDEM_SERVICO_CRIADA",
             payload={
+                "correlation_id": correlation_id.get(),
                 "ordem_id": ordem.id,
                 "solicitante_id": ordem.solicitante_id,
                 "status": ordem.status
@@ -79,6 +91,11 @@ class OrdemServicoService:
             )
 
         self.outbox_repository.criar( evento )
+
+        logger.info(
+            f"Evento criado: "
+            f"{evento.id}"
+        )
 
         # Monta resposta
         resposta = {

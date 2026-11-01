@@ -26,6 +26,12 @@ from src.exceptions.not_found import (
     NotFoundException
 )
 
+from fastapi import Header
+
+from src.repositories.idempotency_repository import (
+    IdempotencyRepository
+)
+
 router = APIRouter(
     prefix="/ordens-servico",
     tags=["Ordens de Serviço"]
@@ -35,8 +41,12 @@ router = APIRouter(
 @router.post("")
 def criar_ordem_servico(
     request: CriarOrdemServicoRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    idempotency_key: str = Header(...)
 ):
+    idempotency_repository = (
+        IdempotencyRepository(db)
+    )
 
     repository = OrdemServicoRepository(db)
 
@@ -44,14 +54,16 @@ def criar_ordem_servico(
 
     service = OrdemServicoService(
         repository=repository,
-        requester_client=requester_client
+        requester_client=requester_client,
+        idempotency_repository=idempotency_repository
     )
 
     try:
 
         return service.criar(
             solicitante_id=request.solicitante_id,
-            descricao=request.descricao
+            descricao=request.descricao,
+            idempotency_key=idempotency_key
         )
 
     except NotFoundException as ex:

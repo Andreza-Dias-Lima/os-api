@@ -5,20 +5,14 @@ from src.models.ordem_servico import OrdemServico
 
 class OrdemServicoRepository:
 
-    def __init__(
-        self,
-        db: Session
-    ):
+    def __init__(self, db):
         self.db = db
 
-    def criar(
-        self,
-        ordem: OrdemServico
-    ) -> OrdemServico:
+    def criar(self, ordem):
 
         self.db.add(ordem)
 
-        self.db.commit()
+        self.db.flush()
 
         self.db.refresh(ordem)
 

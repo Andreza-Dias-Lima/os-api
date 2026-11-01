@@ -7,6 +7,7 @@ from alembic import context
 
 from src.database.base import Base
 from src.models.ordem_servico import OrdemServico
+from src.models.idempotency_key import IdempotencyKey
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

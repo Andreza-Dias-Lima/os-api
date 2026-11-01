@@ -2,7 +2,12 @@ from fastapi import FastAPI
 
 from sqlalchemy import text
 
+from src.database.base import Base
 from src.database.session import engine
+
+from src.models.ordem_servico import OrdemServico
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="API Ordem de Serviço",

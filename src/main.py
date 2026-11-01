@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+
 from sqlalchemy import text
+
 from src.database.session import engine
 
 app = FastAPI(
@@ -19,6 +21,7 @@ def health():
 def db_check():
 
     with engine.connect() as conn:
+
         result = conn.execute(
             text("SELECT 1")
         )

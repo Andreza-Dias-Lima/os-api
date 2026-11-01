@@ -7,7 +7,6 @@ from src.database.session import engine
 
 from src.models.ordem_servico import OrdemServico
 
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="API Ordem de Serviço",

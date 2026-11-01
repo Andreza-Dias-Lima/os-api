@@ -5,4 +5,5 @@ psycopg2-binary
 alembic
 pydantic-settings
 pytest
+pytest-mock
 httpx

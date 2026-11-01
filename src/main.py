@@ -6,13 +6,16 @@ from src.database.base import Base
 from src.database.session import engine
 
 from src.models.ordem_servico import OrdemServico
-
+from src.api.ordem_servico import router
 
 app = FastAPI(
     title="API Ordem de Serviço",
     version="1.0.0"
 )
 
+app.include_router(
+    router
+)
 
 @app.get("/health")
 def health():

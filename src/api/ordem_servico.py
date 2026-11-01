@@ -67,17 +67,8 @@ def criar_ordem_servico(
         outbox_repository=outbox_repository
     )
 
-    try:
-
-        return service.criar(
-            solicitante_id=request.solicitante_id,
-            descricao=request.descricao,
-            idempotency_key=idempotency_key
-        )
-
-    except NotFoundException as ex:
-
-        raise HTTPException(
-            status_code=404,
-            detail=str(ex)
-        )
+    return service.criar(
+    solicitante_id=request.solicitante_id,
+    descricao=request.descricao,
+    idempotency_key=idempotency_key
+)

@@ -8,14 +8,28 @@ from src.database.session import engine
 from src.models.ordem_servico import OrdemServico
 from src.api.ordem_servico import router
 
+from src.middlewares.exception_handler import (
+    requester_not_found_handler
+)
+
+from src.exceptions.not_found import (
+    NotFoundException
+)
+
 app = FastAPI(
     title="API Ordem de Serviço",
     version="1.0.0"
 )
 
+app.add_exception_handler(
+    NotFoundException,
+    requester_not_found_handler
+)
+
 app.include_router(
     router
 )
+
 
 @app.get("/health")
 def health():

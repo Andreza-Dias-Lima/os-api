@@ -1,7 +1,19 @@
 class NotFoundException(Exception):
 
-    def __init__(self):
+     def __init__(self):
 
-        super().__init__(
+        self.type = (
+            "/errors/not-found"
+        )
+
+        self.title = (
             "Solicitante não encontrado"
         )
+
+        self.status = 404
+
+        self.detail = (
+            "O solicitante informado não existe"
+        )
+
+        super().__init__(self.detail)

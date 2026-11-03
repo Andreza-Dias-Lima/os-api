@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from pydantic import Field
+from pydantic import ConfigDict
 
 
 class CriarOrdemServicoRequest(BaseModel):
@@ -15,12 +16,10 @@ class CriarOrdemServicoRequest(BaseModel):
 class OrdemServicoResponse(BaseModel):
 
     id: str
-
     solicitante_id: str
-
     descricao: str
-
     status: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True
+    )

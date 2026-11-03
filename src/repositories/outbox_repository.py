@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from datetime import UTC
 from sqlalchemy.orm import Session
 
 from src.models.outbox_event import (
@@ -43,7 +43,7 @@ class OutboxRepository:
         evento.published = True
 
         evento.published_at = (
-            datetime.utcnow()
+            datetime.now(UTC)
         )
 
         self.db.commit()

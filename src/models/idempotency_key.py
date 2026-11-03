@@ -1,6 +1,7 @@
 import uuid
 
 from datetime import datetime
+from datetime import UTC
 
 from sqlalchemy import String
 from sqlalchemy import DateTime
@@ -38,5 +39,5 @@ class IdempotencyKey(Base):
 
     criado_em: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=datetime.now(UTC)
     )

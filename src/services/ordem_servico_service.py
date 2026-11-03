@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import UTC
 
 from src.models.ordem_servico import OrdemServico
 
@@ -66,7 +67,7 @@ class OrdemServicoService:
             solicitante_id=solicitante_id,
             descricao=descricao,
             status="CRIADA",
-            criado_em=datetime.utcnow()
+            criado_em=datetime.now(UTC)
         )
 
         ordem = self.repository.criar(

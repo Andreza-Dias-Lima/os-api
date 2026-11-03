@@ -1,6 +1,7 @@
 import uuid
 
 from datetime import datetime
+from datetime import UTC
 
 from sqlalchemy import String
 from sqlalchemy import DateTime
@@ -38,7 +39,7 @@ class OutboxEvent(Base):
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=datetime.now(UTC)
     )
 
     published_at: Mapped[datetime | None] = mapped_column(

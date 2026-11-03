@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Ordem de Serviço - Apresentação Executiva</title>
+<style>
+:root{--bg:#F8FAFC;--card:#FFF;--text:#0F172A;--secondary:#475569;--accent:#EA580C;--border:#E2E8F0}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
+body{background:var(--bg);overflow:hidden}
+.slide{display:none;width:100vw;height:100vh;padding:60px;background:var(--bg)}
+.slide.active{display:flex;flex-direction:column;justify-content:center}
+.cover{background:linear-gradient(135deg,#1E293B,#334155,#EA580C);color:#fff}
+h1{font-size:3.2rem;margin-bottom:20px}
+h2{font-size:2.2rem;margin-bottom:20px;color:#0F172A}
+.cover h2,.cover p,.cover li{color:#fff}
+p,li{font-size:1.05rem;line-height:1.7;color:#475569}
+ul{margin-left:25px}
+.row{display:flex;gap:18px;flex-wrap:wrap}
+.metric{background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:18px;min-width:220px;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.counter{position:fixed;top:10px;right:15px;background:#fff;padding:8px 12px;border-radius:8px}
+.nav{position:fixed;bottom:20px;right:20px}.nav button{padding:10px 16px;border:none;background:#EA580C;color:#fff;border-radius:8px}
+pre{background:#fff;border:1px solid #E2E8F0;padding:16px;border-radius:8px}
+.risk-table{width:100%;border-collapse:collapse}.risk-table th{background:#1E293B;color:#fff;padding:10px}.risk-table td{padding:10px;border:1px solid #E2E8F0}
+.badge{padding:4px 10px;border-radius:12px;font-weight:600}.risk-low{background:#DCFCE7;color:#166534}.risk-medium{background:#FEF3C7;color:#92400E}.risk-high{background:#FEE2E2;color:#991B1B}.risk-critical{background:#FCA5A5;color:#7F1D1D}
+</style></head><body>
+<div class="counter"><span id="current">1</span>/12</div>
+<section class="slide active cover"><h1>API Ordem de Serviço</h1><p>Arquitetura resiliente com FastAPI, PostgreSQL, Idempotência, Outbox Pattern e Observabilidade.</p></section>
+<section class="slide"><h2>Problema e Objetivos</h2><ul><li>Evitar duplicidade</li><li>Garantir consistência</li><li>Publicar eventos com confiabilidade</li><li>Rastreabilidade ponta a ponta</li></ul></section>
+<section class="slide"><h2>Arquitetura</h2><pre>Cliente → API → Service → Repository → PostgreSQL → Outbox → Worker</pre></section>
+<section class="slide"><h2>Estratégia de Banco</h2><p>PostgreSQL por suporte ACID, transações e consistência.</p><ul><li>ordens_servico</li><li>idempotency_keys</li><li>outbox_events</li></ul></section>
+<section class="slide"><h2>CAP Theorem</h2><p><b>Estratégia CP</b>: Consistency</p><p>Preferimos consistência a disponibilidade em cenários extremos.</p></section>
+<section class="slide"><h2>Idempotência</h2><p>Mesma chave → mesma resposta → nenhuma duplicidade operacional.</p></section>
+<section class="slide"><h2>Outbox Pattern</h2><p>Ordem e evento persistidos na mesma transação garantindo consistência.</p></section>
+<section class="slide"><h2>Observabilidade</h2><ul><li>Correlation ID</li><li>Logs estruturados</li><li>Rastreabilidade do Worker</li></ul></section>
+<section class="slide"><h2>Monitoramento</h2><ul><li>Prometheus</li><li>Grafana</li><li>OpenTelemetry</li><li>Loki</li><li>Tempo</li></ul></section>
+<section class="slide"><h2>Riscos, Limitações e Trade-offs</h2><table class="risk-table"><tr><th>Risco</th><th>Prob.</th><th>Impacto</th><th>Mitigação</th></tr><tr><td>Falha PostgreSQL</td><td><span class="badge risk-medium">Média</span></td><td><span class="badge risk-critical">Alto</span></td><td>HA e Réplicas</td></tr><tr><td>Worker indisponível</td><td><span class="badge risk-medium">Média</span></td><td><span class="badge risk-high">Alto</span></td><td>Retry + Scheduler</td></tr><tr><td>Integração externa</td><td><span class="badge risk-high">Alta</span></td><td><span class="badge risk-medium">Médio</span></td><td>Circuit Breaker</td></tr><tr><td>Crescimento Outbox</td><td><span class="badge risk-high">Alta</span></td><td><span class="badge risk-medium">Médio</span></td><td>Retenção</td></tr></table></section>
+<section class="slide cover"><h2>Roadmap</h2><div class="row"><div class="metric">🟢 JWT, Retry</div><div class="metric">🟡 Redis, DLQ</div><div class="metric">🔴 Kafka</div></div><p style="margin-top:20px">A solução prioriza consistência, confiabilidade e observabilidade com evolução gradual para arquitetura orientada a eventos.</p></section>
+<div class="nav"><button onclick="p()">◀</button><button onclick="n()">▶</button></div>
+<script>let c=0,s=document.querySelectorAll('.slide');function show(i){s.forEach(x=>x.classList.remove('active'));s[i].classList.add('active');document.getElementById('current').innerText=i+1}function n(){if(c<s.length-1){c++;show(c)}}function p(){if(c>0){c--;show(c)}}document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')n();if(e.key==='ArrowLeft')p()});</script>
+</body></html>
